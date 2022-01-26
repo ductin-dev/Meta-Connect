@@ -2,18 +2,30 @@ import { BigNumber, ethers } from "ethers";
 import styles from "./style.module.scss";
 import ErrorMess from "components/message/ErrorMess";
 import { searchwallet } from "../../business/searchwallet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InfoMess from "components/message/InfoMess";
 import { Spin } from "antd";
 import { isEmpty } from "../../static/utils/validation";
+import SuccessMess from "components/message/SuccessMess";
+import { convertCrypto } from "../../static/utils/convertCrypto";
 
 const ViewWallet = () => {
   const [address, setAddress] = useState("");
   const [balance, setBalance] = useState(BigNumber.from(0));
+  const [USDBanlance, setUSDBanlance] = useState(0);
   const [error, setError] = useState("");
 
   const [status, setStatus] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    convertCrypto(
+      Number.parseFloat(ethers.utils.formatEther(balance)),
+      "ethereum",
+      "usd",
+      setUSDBanlance
+    ).then((result) => setUSDBanlance(result));
+  }, [address, balance]);
 
   return (
     <div className={`w-full max-w-xs ${styles.container}`}>
@@ -65,16 +77,24 @@ const ViewWallet = () => {
       </form>
       {status ? (
         error.length === 0 ? (
-          <InfoMess
-            title="Balance in ETH: "
-            description={
-              loading ? (
-                <Spin size="small" />
-              ) : (
-                ethers.utils.formatEther(balance)
-              )
-            }
-          />
+          <>
+            <InfoMess
+              title="Balance in ETH: "
+              description={
+                loading ? (
+                  <Spin size="small" />
+                ) : (
+                  ethers.utils.formatEther(balance)
+                )
+              }
+            />
+            <br></br>
+            <InfoMess
+              color="green"
+              title="Balance in USD: "
+              description={loading ? <Spin size="small" /> : USDBanlance}
+            />
+          </>
         ) : (
           <ErrorMess mess={error} />
         )

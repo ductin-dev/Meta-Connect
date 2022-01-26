@@ -10,6 +10,8 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.18.5",
+    "axios": "^0.25.0",
+    "cryptocurrency-unit-convert": "^1.2.8",
     "ethers": "^5.5.3",
     "node-sass": "^7.0.1",
     "react": "^17.0.2",

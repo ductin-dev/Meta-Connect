@@ -1,0 +1,17 @@
+.span_link {
+  font-size: 11px;
+  color: white;
+  background-color: forestgreen;
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+
+.span_link:hover {
+  background-color: rgb(76, 167, 76);
+}
+
+.info_mess {
+  color: rgba(176, 62, 230, 0.8);
+  border-color: rgba(176, 62, 230, 0.8);
+  background-color: rgba(176, 62, 230, 0.24);
+}

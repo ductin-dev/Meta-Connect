@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { initState } from "./reducer";
+import { initState } from "../application/context/reducer";
 
 export const disconnectwallet = async (
   setAddress: any,
@@ -11,7 +11,6 @@ export const disconnectwallet = async (
     setAddress(initState.wallet.address);
     setBalance(initState.wallet.credit);
     setStatus(initState.wallet.connected);
-    //Set context to init
   } catch (err: any) {
     setError(err.message);
   }

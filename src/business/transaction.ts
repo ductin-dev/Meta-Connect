@@ -1,36 +1,34 @@
 import { ethers } from "ethers";
+import { isNumber, isEmpty } from "../static/utils/validation";
+
+const validation = (address: string, amount: string) => {
+  if (!isNumber(Number.parseFloat(amount), 0, Number.MAX_VALUE))
+    throw new Error("Please type a valid amount");
+  if (isEmpty(address)) throw new Error("Please type a valid address");
+};
 
 export const transaction = async (
-  setAddress: any,
-  setBalance: any,
-  setStatus: any,
-  setError: any
+  address: any,
+  amount: any,
+  setError: any,
+  setTxs: any
 ) => {
   try {
+    validation(address, amount);
     if (!window.ethereum)
       throw new Error("No crypto wallet found. Please install it.");
-
     await window.ethereum.request({ method: "eth_requestAccounts" });
+
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
+    ethers.utils.getAddress(address);
 
-    signer.getAddress().then((address) => {
-      setAddress(address);
-      setStatus(address.length > 0);
-      provider.getBalance(address).then((balance) => {
-        setBalance(balance);
-      });
-    });
-
-    /*ethers.utils.getAddress(addr);
     const tx = await signer.sendTransaction({
-      to: addr,
-      value: ethers.utils.parseEther(ether),
+      to: address,
+      value: ethers.utils.parseEther(amount),
     });
 
-    console.log({ ether, addr });
-    console.log("tx", tx);
-    setTxs([tx]);*/
+    setTxs([tx]);
   } catch (err: any) {
     setError(err.message);
   }

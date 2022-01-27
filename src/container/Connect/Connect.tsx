@@ -6,15 +6,20 @@ import styles from "./style.module.scss";
 import ErrorMess from "components/message/ErrorMess";
 import { connectwallet } from "../../business/connectwallet";
 import { disconnectwallet } from "../../business/disconnectwallet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SuccessMess from "components/message/SuccessMess";
 import { CopyOutlined } from "@ant-design/icons";
 import { trimText } from "static/utils/trimText";
+import { UPDATE_WALLET } from "data/Action";
+import { walletType } from "application/context/reducer";
 
 const { Meta } = Card;
 
 const Connect = () => {
-  const wallet = useSelector((state: any) => state.globalState);
+  const dispatch = useDispatch();
+  const wallet = useSelector(
+    (state: any) => state.globalState.wallet
+  ) as walletType;
 
   const [address, setAddress] = useState("");
   const [balance, setBalance] = useState(BigNumber.from(0));
@@ -22,6 +27,23 @@ const Connect = () => {
   const [error, setError] = useState("use metamask wallet");
 
   const [color, setColor] = useState("black");
+
+  useEffect(() => {
+    setAddress(wallet.address);
+    setBalance(wallet.credit);
+    setStatus(wallet.connected);
+  }, []);
+
+  useEffect(() => {
+    dispatch({
+      type: UPDATE_WALLET,
+      wallet: {
+        address: address,
+        credit: balance,
+        connected: status,
+      } as walletType,
+    });
+  }, [dispatch, status]);
 
   return (
     <div className={`w-full max-w-xs ${styles.container}`}>
@@ -91,3 +113,6 @@ const Connect = () => {
 };
 
 export default Connect;
+function dispatch(arg0: { type: any; fontFamily: any }) {
+  throw new Error("Function not implemented.");
+}

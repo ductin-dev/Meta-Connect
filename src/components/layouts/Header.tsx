@@ -1,4 +1,3 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon } from "@heroicons/react/outline";
@@ -8,8 +7,13 @@ import { Link, NavLink } from "react-router-dom";
 import { jsonClassNames } from "../../static/utils/jsonClassNames";
 import logo from "../../static/image/logo.png";
 import styles from "./style.module.scss";
+import { useSelector } from "react-redux";
+import { walletType } from "application/context/reducer";
 
 export default function Example() {
+  const wallet = useSelector(
+    (state: any) => state.globalState.wallet
+  ) as walletType;
   return (
     <Popover className="relative bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -128,12 +132,21 @@ export default function Example() {
             >
               💰MetaMask
             </a>
-            <Link
-              to="/connect"
-              className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 hover:text-gray-100"
-            >
-              Connect
-            </Link>
+            {wallet.address.length > 0 ? (
+              <Link
+                to="/connect"
+                className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 hover:text-gray-100"
+              >
+                Connected !
+              </Link>
+            ) : (
+              <Link
+                to="/connect"
+                className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 hover:text-gray-100"
+              >
+                Connect
+              </Link>
+            )}
           </div>
         </div>
       </div>
